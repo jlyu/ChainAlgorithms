@@ -80,6 +80,10 @@ public class Percolation {
            throw new IndexOutOfBoundsException("index i or j out of bounds");
        }
        
+       if (i == 1 && j == 1) {
+           return false;
+       }
+       
        int p = (i-1) * this.N + (j-1);
        for (int q = 0; q < this.N; q++) {
            if (sites.connected(p, q)) {
