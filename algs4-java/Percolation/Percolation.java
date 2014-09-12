@@ -6,6 +6,10 @@ public class Percolation {
     
    // create N-by-N grid, with all sites blocked
    public Percolation(int N) {
+       if (N <= 0) {
+           throw new  java.lang.IllegalArgumentException("N cannot <= 0");
+       }
+       
        this.N = N;
        sites = new WeightedQuickUnionUF(N * N);
        openSites = new boolean[N * N];
@@ -16,6 +20,9 @@ public class Percolation {
        
    // open site (row i, column j) if it is not already
    public void open(int i, int j) { // range of i and j: [1, N]
+       if ((i < 1 || i > this.N) || (j < 1 || j > this.N)) {
+           throw new IndexOutOfBoundsException("index i or j out of bounds");
+       }
        
        int offsetI = i - 1;
        int offsetJ = j - 1;
@@ -69,7 +76,11 @@ public class Percolation {
    
    // is site (row i, column j) full?
    public boolean isFull(int i, int j) {
-       int p = i * this.N + j;
+       if ((i < 1 || i > this.N) || (j < 1 || j > this.N)) {
+           throw new IndexOutOfBoundsException("index i or j out of bounds");
+       }
+       
+       int p = (i-1) * this.N + (j-1);
        for (int q = 0; q < this.N; q++) {
            if (sites.connected(p, q)) {
                return true;
@@ -94,30 +105,62 @@ public class Percolation {
    
    // test client, optional
    public static void main(String[] args) {
-       StdOut.println("start testing.."); 
-        
-       int N = 20;
+       
+       int N = 0;
+       int[] datas = new int[1];
+       boolean fileSource = false;
+       
+       if (args.length == 1) {
+           boolean isNum = args[0].matches("[0-9]+");
+           if (isNum) { 
+               N = Integer.parseInt(args[0]);
+           } else {
+               In in = new In(args[0]);
+               datas = in.readAllInts();
+               N = datas[0];
+               fileSource = true;
+           }
+       } else {
+           N = 20;   
+       }
+       
        Percolation p = new Percolation(N);
        
        int openCounter = 0;
-       while (true) {
+       int i = 0;
+       int j = 0;
+       int datasIndex = 1;
+       while (!p.percolates()) {
            
-           int i = (int) (Math.random() * N + 1);
-           int j = (int) (Math.random() * N + 1); 
+           if (fileSource) {
+               if (datasIndex < datas.length) {
+                     
+                       i = datas[datasIndex];
+                       j = datas[datasIndex + 1];
+                       datasIndex += 2;
+               } else {
+                   
+                   StdOut.println("does not percolation");
+                   return;
+               }
+           } else {
+               i = (int) (Math.random() * N + 1);
+               j = (int) (Math.random() * N + 1); 
+           }
            
-           if (!p.isOpen(i-1, j-1)) {
+           
+           if (!p.isOpen(i, j)) {
                openCounter++;
                StdOut.println("open: " + i + ", " + j);
            
                p.open(i, j);
-               
-               if (p.percolates()) {
-                   break;
-               }
+              
            }
        }
        
-       StdOut.println("open counter: " + openCounter);
+       
+       
+       StdOut.println("open sites: " + openCounter);
        double threshold = openCounter / (double) (N *N);
        StdOut.println(threshold);
    }
