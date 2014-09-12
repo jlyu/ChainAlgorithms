@@ -27,33 +27,33 @@ public class Percolation {
        }
        
        // up
-       if(i_ > 0) {
-           if(isOpen(i_ - 1, j_)) {
+       if (i_ > 0) {
+           if (isOpen(i_ - 1, j_)) {
                int q = (i_ - 1) * _N + j_;
                _sites.union(p, q);
            }
        }
        
        // down
-       if(i_ < _N - 1) {
+       if (i_ < _N - 1) {
            int q = (i_ + 1) * _N + j_;
-           if(isOpen(i_ + 1, j_)) {
+           if (isOpen(i_ + 1, j_)) {
                _sites.union(p, q);
            }
        }
        
        // left
-       if(j_ > 0) {
+       if (j_ > 0) {
            int q = i_ * _N + j_ - 1;
-           if(isOpen(i_, j_ - 1)) {
+           if (isOpen(i_, j_ - 1)) {
                _sites.union(p, q);
            }
        }
        
        // right
-       if(j_ < _N - 1) {
+       if (j_ < _N - 1) {
            int q = i_ * _N + j_ + 1;
-           if(isOpen(i_, j_ + 1)) {
+           if (isOpen(i_, j_ + 1)) {
                _sites.union(p, q);
            }
        }
@@ -61,14 +61,17 @@ public class Percolation {
    
    // is site (row i, column j) open?
    public boolean isOpen(int i, int j) {
+       if ((i < 0 || i >= _N) || (j < 0 || j >= _N)) {
+           throw new IndexOutOfBoundsException("index i or j out of bounds");
+       }
        return _openSites[i * _N + j];
    }
    
    // is site (row i, column j) full?
    public boolean isFull(int i, int j) {
        int p = i * _N + j;
-       for(int q=0; q<_N; q++) {
-           if(_sites.connected(p, q)) {
+       for (int q = 0; q < _N; q++) {
+           if (_sites.connected(p, q)) {
                return true;
            }
        }
@@ -77,11 +80,11 @@ public class Percolation {
    
    // does the system percolate?
    public boolean percolates() {
-       for(int t=1; t<=_N; t++) { // top
-           for(int b=1; b<=_N; b++) { //bottom
+       for (int t = 1; t <= _N; t++) { // top
+           for (int b = 1; b <= _N; b++) { //bottom
                int p = t - 1;
                int q = (_N - 1) * _N + b - 1;
-               if(_sites.connected(p, q)) {
+               if (_sites.connected(p, q)) {
                    return true;
                }
            }
@@ -97,10 +100,10 @@ public class Percolation {
        Percolation p = new Percolation(N);
        
        int openCounter = 0;
-       while(true) {
+       while (true) {
            
-           int i = (int)(Math.random() * N + 1);
-           int j = (int)(Math.random() * N + 1); 
+           int i = (int) (Math.random() * N + 1);
+           int j = (int) (Math.random() * N + 1); 
            
            if (!p.isOpen(i-1, j-1)) {
                openCounter++;
@@ -108,14 +111,14 @@ public class Percolation {
            
                p.open(i, j);
                
-               if(p.percolates()){
+               if (p.percolates()) {
                    break;
                }
            }
        }
        
        StdOut.println("open counter: " + openCounter);
-       double threshold = openCounter / (double)(N *N);
+       double threshold = openCounter / (double) (N *N);
        StdOut.println(threshold);
    }
        
