@@ -1,6 +1,6 @@
 public class Percolation {
     
-   private WeightedQuickUnionUF sites;
+   private QuickFindUF sites;  // WeightedQuickUnionUF;
    private boolean[] openSites;
    private int N;
     
@@ -11,7 +11,7 @@ public class Percolation {
        }
        
        this.N = N;
-       sites = new WeightedQuickUnionUF(N * N);
+       sites = new QuickFindUF(N * N); 
        openSites = new boolean[N * N];
        for (int i = 0; i < N * N; i++) {
             openSites[i] = false;
@@ -80,13 +80,13 @@ public class Percolation {
            throw new IndexOutOfBoundsException("index i or j out of bounds");
        }
        
-       if (!site.isOpen(i,j)) {
+       if (!isOpen(i, j)) {
            return false;
        }
        
        int p = (i-1) * this.N + (j-1); 
        for (int q = 0; q < this.N; q++) { // top line
-           if (!sites.isOpen(1, q+1)) {
+           if (!isOpen(1, q+1)) {
                continue;    
            }
            
@@ -99,6 +99,10 @@ public class Percolation {
    
    // does the system percolate?
    public boolean percolates() {
+       if (this.N == 1) {
+           return false;
+       }
+       
        for (int t = 1; t <= this.N; t++) { // top
            for (int b = 1; b <= this.N; b++) { //bottom
                int p = t - 1;
@@ -123,10 +127,15 @@ public class Percolation {
            if (isNum) { 
                N = Integer.parseInt(args[0]);
            } else {
-               In in = new In(args[0]);
-               datas = in.readAllInts();
-               N = datas[0];
-               fileSource = true;
+               try {
+                   In in = new In(args[0]);
+                   datas = in.readAllInts();
+                   N = datas[0];
+                   fileSource = true;
+               } catch (RuntimeException e) {
+                   StdOut.println("file path goes wrong: " + e);
+                   return;
+               }
            }
        } else {
            N = 20;   
@@ -141,13 +150,13 @@ public class Percolation {
        while (!p.percolates()) {
            
            if (fileSource) {
-               if (datasIndex < datas.length) {
+               if (datasIndex <= datas.length) {
                      
                        i = datas[datasIndex];
                        j = datas[datasIndex + 1];
                        datasIndex += 2;
                } else {
-                   
+                   StdOut.println(p.percolates());
                    StdOut.println("does not percolation");
                    return;
                }
@@ -161,8 +170,7 @@ public class Percolation {
                openCounter++;
                StdOut.println("open: " + i + ", " + j);
            
-               p.open(i, j);
-              
+               p.open(i, j);   
            }
        }
        
@@ -170,7 +178,7 @@ public class Percolation {
        
        StdOut.println("open sites: " + openCounter);
        double threshold = openCounter / (double) (N *N);
-       StdOut.println(threshold);
+       StdOut.println("p* = " + threshold);
    }
        
 }
