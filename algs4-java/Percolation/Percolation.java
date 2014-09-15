@@ -118,7 +118,7 @@ public class Percolation {
    // test client, optional
    public static void main(String[] args) {
        
-       int N = 0;
+       int N = 20;
        int[] datas = new int[1];
        boolean fileSource = false;
        
@@ -137,8 +137,6 @@ public class Percolation {
                    return;
                }
            }
-       } else {
-           N = 20;   
        }
        
        Percolation p = new Percolation(N);
