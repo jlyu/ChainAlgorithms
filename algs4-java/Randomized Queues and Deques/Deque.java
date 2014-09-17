@@ -39,7 +39,6 @@ public class Deque<Item> implements Iterable<Item> {
         }
         
         if (isEmpty()) {
-
             tail.item = item;
             tail.next = head;
 
