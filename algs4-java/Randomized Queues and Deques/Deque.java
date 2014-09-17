@@ -9,9 +9,9 @@ public class Deque<Item> implements Iterable<Item> {
     private Node head;
     private Node tail;
     private class Node {
-        Item item;
-        Node prev; // left
-        Node next; // right
+        private Item item;
+        private Node prev; // left
+        private Node next; // right
     }
 
     // construct an empty deque
@@ -146,7 +146,7 @@ public class Deque<Item> implements Iterable<Item> {
     }
     
     private void print() {
-        for(Item s: this) {
+        for (Item s: this) {
             StdOut.print(s + " ");
         }
     }

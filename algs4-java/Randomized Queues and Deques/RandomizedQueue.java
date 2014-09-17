@@ -9,8 +9,8 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     private Node start;
     private Node head;
     private class Node {
-        Item item;
-        Node next;
+        private Item item;
+        private Node next;
     }
     
     // construct an empty randomized queue
@@ -42,7 +42,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         head.item = item;
         head.next = null;
         
-        if(isEmpty()) {
+        if (isEmpty()) {
             head = oldNode;
             start.next = head; // set start pointer
         } else {
@@ -109,9 +109,9 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         }
         
         public Item next() {
-            while (!hasNext()) {
+            if (!hasNext()) {
                 throw new NoSuchElementException();
-                //int randomDequeN = (int) (Math.random() * counter);  // range: 0 ~ counter
+                
             }
             counter--;
             //Item item = current.item;
