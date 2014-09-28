@@ -28,22 +28,6 @@ public class Point implements Comparable<Point> {
     public void drawTo(Point that) {
         StdDraw.line(this.x, this.y, that.x, that.y);
     }
-  
-    
-    public boolean isHorizontal(Point that) {
-        if ((this.y == that.y) && (this.x != that.x)) {
-            return true;
-        }
-        return false;
-    }
- 
-    
-    public boolean isVertical(Point that) {
-        if ((this.x == that.x) && (this.y != that.y)) {
-            return true;
-        }
-        return false;
-    }
 
     
     // slope between this point and that point
@@ -91,7 +75,7 @@ public class Point implements Comparable<Point> {
     }
     
     
-    public class SlopeComparator implements Comparator<Point> {
+    private class SlopeComparator implements Comparator<Point> {
         
         @Override
         public int compare(Point p1, Point p2) { // TODO

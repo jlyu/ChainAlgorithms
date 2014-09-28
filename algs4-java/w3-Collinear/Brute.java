@@ -29,35 +29,7 @@ public class Brute {
         printLine(p1, p2, p3, p4);
         printString(p1, p2, p3, p4);
     }
-    
-    private static boolean testHorizontal(Point p1, Point p2, Point p3, Point p4) {
-        if (p1.isHorizontal(p2)) {
-            if (p1.isHorizontal(p3)) {
-                if (p1.isHorizontal(p4)) {
-              
-                    return true;
-            
-                }
-            }
-        }
-            
-        return false;
-    }
-    
-    private static boolean testVertical(Point p1, Point p2, Point p3, Point p4) {
-        if (p1.isVertical(p2)) {
-            if (p1.isVertical(p3)) {
-                if (p1.isVertical(p4)) {
-              
-                    return true;
-            
-                }
-            }
-        }
-            
-        return false;
-    }
-    
+
     private static boolean testDegenerate(Point p1, Point p2, Point p3) {
   
         double k12 = p1.slopeTo(p2);
@@ -83,22 +55,9 @@ public class Brute {
         return false;
     }
     
-    
-    
-    public static void main(String[] args) {
-        if (args.length != 1) {
-            throw new IllegalArgumentException("Wrong number of arguments");
-        }
+    private static Point[] readPoints(String fileName) {
         
-        // rescale coordinates and turn on animation mode
-        StdDraw.setXscale(0, 32768);
-        StdDraw.setYscale(0, 32768);
-        StdDraw.show(0);
-        StdDraw.setPenRadius(0.005);  // make the points a bit larger
-        
-        // read
-        String filename = args[0];
-        In in = new In(filename);
+        In in = new In(fileName);
         int N = in.readInt();  // the first element: the number of points
         
         Point[] points = new Point[N];
@@ -111,6 +70,25 @@ public class Brute {
             points[i] = p;
             p.draw();
         }
+        
+        return points;
+    }
+    
+    
+    
+    public static void main(String[] args) {
+        if (args.length != 1) {
+            throw new IllegalArgumentException("Wrong number of arguments");
+        }
+        
+        // rescale coordinates and turn on animation mode
+        StdDraw.setXscale(0, 32768);
+        StdDraw.setYscale(0, 32768);
+        StdDraw.setPenRadius(0.005);  // make the points a bit larger
+        
+        Point[] points = readPoints(args[0]);
+        int N = points.length;
+        
         
         for (int i = 0; i < N; i++) {
             
@@ -129,17 +107,6 @@ public class Brute {
                      for (int l = k + 1; l < N; l++) {
  
                          Point p4 = points[l];
-         
-                         if (testHorizontal(p1, p2, p3, p4)) {
-                             print(p1, p2, p3, p4);
-                             continue;
-                         }
-                             
-
-                         if (testVertical(p1, p2, p3, p4)) {
-                             print(p1, p2, p3, p4);
-                             continue;
-                         }
                          
                          if (testDegenerate(p1, p2, p3, p4)) {
                             print(p1, p2, p3, p4);
@@ -155,6 +122,5 @@ public class Brute {
 
         // reset the pen radius
         StdDraw.setPenRadius();
-    
     }
 }
