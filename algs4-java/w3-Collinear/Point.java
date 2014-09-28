@@ -17,15 +17,18 @@ public class Point implements Comparable<Point> {
         this.y = y;
     }
 
+    
     // plot this point to standard drawing
     public void draw() {
         StdDraw.point(x, y);
     }
 
+    
     // draw line between this point and that point to standard drawing
     public void drawTo(Point that) {
         StdDraw.line(this.x, this.y, that.x, that.y);
     }
+  
     
     public boolean isHorizontal(Point that) {
         if ((this.y == that.y) && (this.x != that.x)) {
@@ -33,6 +36,7 @@ public class Point implements Comparable<Point> {
         }
         return false;
     }
+ 
     
     public boolean isVertical(Point that) {
         if ((this.x == that.x) && (this.y != that.y)) {
@@ -41,6 +45,7 @@ public class Point implements Comparable<Point> {
         return false;
     }
 
+    
     // slope between this point and that point
     public double slopeTo(Point that) {
         if (this.x == that.x && this.y == that.y) {
@@ -59,6 +64,7 @@ public class Point implements Comparable<Point> {
         
     }
 
+    
     // is this point lexicographically smaller than that one?
     // comparing y-coordinates and breaking ties by x-coordinates
     @Override
@@ -77,7 +83,6 @@ public class Point implements Comparable<Point> {
     }
     
 
-    
     private static void show(Comparable[] a) {
         for (int i = 0; i < a.length; i++) {
             StdOut.print(a[i] + " ");
@@ -85,9 +90,6 @@ public class Point implements Comparable<Point> {
         StdOut.println();
     }
     
-    private static void exch(Object[] a, int i, int j) {
-        Object t = a[i]; a[i] = a[j]; a[j] = t;
-    }
     
     public class SlopeComparator implements Comparator<Point> {
         
@@ -111,6 +113,9 @@ public class Point implements Comparable<Point> {
     
     // unit test
     public static void main(String[] args) {
+        if (args.length != 1) {
+            throw new IllegalArgumentException("Wrong number of arguments");
+        }
         // rescale coordinates and turn on animation mode
         StdDraw.setXscale(0, 32768);
         StdDraw.setYscale(0, 32768);

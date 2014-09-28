@@ -86,6 +86,9 @@ public class Brute {
     
     
     public static void main(String[] args) {
+        if (args.length != 1) {
+            throw new IllegalArgumentException("Wrong number of arguments");
+        }
         
         // rescale coordinates and turn on animation mode
         StdDraw.setXscale(0, 32768);
@@ -118,9 +121,7 @@ public class Brute {
                     Point p1 = points[i];
                     Point p2 = points[j];
                     Point p3 = points[k];
-                    
-
-                         
+                                    
                     if (!testDegenerate(p1, p2, p3)) {
                          continue;
                     }    
@@ -144,10 +145,9 @@ public class Brute {
                             print(p1, p2, p3, p4);
                          }     
                     }
-
-                }// end for k
+                } // end for k
             } // end for j
-        }// end for i
+        } // end for i
    
        
         // display to screen all at once

@@ -48,7 +48,10 @@ public class Fast {
             
             int lo = 1;
             int hi = 2;
-            boolean flag = origin.compareTo(points[lo]) < 0 ? true : false;
+            boolean flag = false;
+            if (origin.compareTo(points[lo]) < 0) {
+                flag = true;
+            }
             
             while (hi < N) {
                  if (points[hi].slopeTo(origin) == points[lo].slopeTo(origin)) {
@@ -61,7 +64,11 @@ public class Fast {
                         Fast.drawCollinear(points, lo, hi); 
                      }
                      lo = hi;
-                     flag = origin.compareTo(points[lo]) < 0 ? true : false;
+                     if (origin.compareTo(points[lo]) < 0) {
+                         flag = true; 
+                     } else { 
+                         flag = false;
+                     }
                  }
                  hi++;
             }
@@ -91,7 +98,5 @@ public class Fast {
             Fast.findCollinear(points, numPoints);
         }
         StdDraw.show(0);
-        
     }
-    
 }
