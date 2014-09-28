@@ -5,7 +5,7 @@ import java.util.Comparator;
 public class Point implements Comparable<Point> {
 
     // compare points by slope
-    public final Comparator<Point> SLOPE_ORDER = new BySlopeOrder();
+    public final Comparator<Point> SLOPE_ORDER = new SlopeComparator();
 
     private final int x; // x coordinate
     private final int y; // y coordinate
@@ -43,21 +43,25 @@ public class Point implements Comparable<Point> {
 
     // slope between this point and that point
     public double slopeTo(Point that) {
-        if (this.x == that.x) {
+        if (this.x == that.x && this.y == that.y) {
+            return Double.NEGATIVE_INFINITY;
+        }
+        else if (this.x == that.x) {
             if (this.y > that.y) { return Double.POSITIVE_INFINITY; }
             if (this.y < that.y) { return Double.NEGATIVE_INFINITY; }
         }
-        
-        if (this.y == that.y) {
+        else if (this.y == that.y) {
             if (this.x > that.x) { return +0.0; }
             if (this.x < that.x) { return -0.0; }
         }
         
         return (double) (that.y - this.y) / (double) (that.x - this.x);
+        
     }
 
     // is this point lexicographically smaller than that one?
     // comparing y-coordinates and breaking ties by x-coordinates
+    @Override
     public int compareTo(Point that) {
         if (this.y > that.y) { return +1; }
         if (this.y == that.y) {
@@ -84,16 +88,22 @@ public class Point implements Comparable<Point> {
     private static void exch(Object[] a, int i, int j) {
         Object t = a[i]; a[i] = a[j]; a[j] = t;
     }
-        
-
     
-    public class BySlopeOrder implements Comparator<Point> {
+    public class SlopeComparator implements Comparator<Point> {
         
+        @Override
         public int compare(Point p1, Point p2) { // TODO
-            if (Point.this.slopeTo(p1) > Point.this.slopeTo(p2)) { return +1; }
-            if (Point.this.slopeTo(p1) < Point.this.slopeTo(p2)) { return -1; }
-           // StdOut.println(p1.toString() + "|" + p2.toString());
-            return 0;
+            
+            double slope1 = Point.this.slopeTo(p1);
+            double slope2 = Point.this.slopeTo(p2);
+            
+            if (slope1 == slope2) {
+                return 0;
+            } else if (slope1 < slope2) {
+                return -1;
+            } else {
+                return 1;
+            }
         }
     }
     
@@ -105,14 +115,14 @@ public class Point implements Comparable<Point> {
         StdDraw.setXscale(0, 32768);
         StdDraw.setYscale(0, 32768);
         StdDraw.show(0);
-        StdDraw.setPenRadius(0.005);  // make the points a bit larger
+        StdDraw.setPenRadius(0.005);  // make the points a bit larger 
         // read
         String filename = args[0];
         In in = new In(filename);
         int N = in.readInt();
         
         Point[] points = new Point[N];
-        //Array<Point> points = new Array<Point>();
+        
         
         for (int i = 0; i < N; i++) {
             int x = in.readInt();
@@ -122,9 +132,12 @@ public class Point implements Comparable<Point> {
             p.draw();
         }
         
+        show(points);
        
-        //Arrays.sort(points, new BySlopeOrder());
+        //Arrays.sort(points);
         
+        Point point = points[0];
+        Arrays.sort(points, point.SLOPE_ORDER);
         
         show(points);
         
