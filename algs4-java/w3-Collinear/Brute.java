@@ -7,51 +7,43 @@
  * the slopes between p and q, between p and r, and between p and s are 
  * all equal.
  */
-
+import java.util.Arrays;
 
 public class Brute {
     
-    private static void printLine(Point p1, Point p2, Point p3, Point p4) {
-        p1.drawTo(p2);
-        p2.drawTo(p3);
-        p3.drawTo(p4);
-    }
-    
-    private static void printString(Point p1, Point p2, Point p3, Point p4) {
-                    
-        StdOut.println(p1.toString() 
-                           + " -> " + p2.toString() 
-                           + " -> " + p3.toString() 
-                           + " -> " + p4.toString());
+    private static void findCollinear(Point[] points, int N) {
+        
+        for (int i = 0; i < N - 3; i++) {
+            for (int j = i + 1; j < N - 2; j++) {
+                for (int k = j + 1; k < N - 1; k++) {
+                     for (int l = k + 1; l < N; l++) {
+                         
+                         if (isCollinear(points[i], points[j], points[k], points[l])) {
+                            print(points[i], points[j], points[k], points[l]);
+                         }    
+                         
+                    }
+                } // end for k
+            } // end for j
+        } // end for i
     }
     
     private static void print(Point p1, Point p2, Point p3, Point p4) {
-        printLine(p1, p2, p3, p4);
-        printString(p1, p2, p3, p4);
+        StdOut.printf("%s -> %s -> %s -> %s\n", 
+                      p1.toString(), 
+                      p2.toString(), 
+                      p3.toString(), 
+                      p4.toString());
+        
+        p1.drawTo(p4);
     }
 
-    private static boolean testDegenerate(Point p1, Point p2, Point p3) {
-  
-        double k12 = p1.slopeTo(p2);
-        double k13 = p1.slopeTo(p3);      
-        
-        if (k12 == k13) {
-            return true;
-        }
-        
-        return false;
-    }
     
-    private static boolean testDegenerate(Point p1, Point p2, Point p3, Point p4) {
+    private static boolean isCollinear(Point p1, Point p2, Point p3, Point p4) {
   
-        double k12 = p1.slopeTo(p2);
-        double k13 = p1.slopeTo(p3);
-        double k14 = p1.slopeTo(p4);        
-        
-        if ((k12 == k13) && (k12 == k14) && (k13 == k14)) {
-            return true;
-        }
-        
+        if (p1.slopeTo(p2) == p1.slopeTo(p3)) {
+            return p1.slopeTo(p2) == p1.slopeTo(p4);
+        } 
         return false;
     }
     
@@ -75,8 +67,8 @@ public class Brute {
     }
     
     
-    
     public static void main(String[] args) {
+        
         if (args.length != 1) {
             throw new IllegalArgumentException("Wrong number of arguments");
         }
@@ -89,38 +81,13 @@ public class Brute {
         Point[] points = readPoints(args[0]);
         int N = points.length;
         
-        
-        for (int i = 0; i < N; i++) {
-            
-            for (int j = i + 1; j < N; j++) {
-                
-                for (int k = j + 1; k < N; k++) {
-                    
-                    Point p1 = points[i];
-                    Point p2 = points[j];
-                    Point p3 = points[k];
-                                    
-                    if (!testDegenerate(p1, p2, p3)) {
-                         continue;
-                    }    
-                    
-                     for (int l = k + 1; l < N; l++) {
- 
-                         Point p4 = points[l];
-                         
-                         if (testDegenerate(p1, p2, p3, p4)) {
-                            print(p1, p2, p3, p4);
-                         }     
-                    }
-                } // end for k
-            } // end for j
-        } // end for i
-   
-       
+        if (N >= 4) {
+            Arrays.sort(points);
+            Brute.findCollinear(points, N);
+        }
+
         // display to screen all at once
         StdDraw.show(0);
 
-        // reset the pen radius
-        StdDraw.setPenRadius();
     }
 }
