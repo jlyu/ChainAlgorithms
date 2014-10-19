@@ -14,6 +14,8 @@ public class BST<Key extends Comparable<Key>, Value> {
         }
     }
     
+    public boolean isEmpty() { return size() == 0; }
+    
     public int size() { return size(root); }
     
     private int size(Node x) {
@@ -67,9 +69,19 @@ public class BST<Key extends Comparable<Key>, Value> {
     private int rank(Key key, Node x) {
         if (x == null) { return 0; }
         int cmp = key.compareTo(x.key);
-        if (cmp < 0) { retun rank(key, x.left); }
+        if (cmp < 0)  { return rank(key, x.left); } 
         else if (cmp > 0) { return 1 + size(x.left) + rank(key, x.right); }
         else { return size(x.left); }
+    }
+    
+    public Key min() {
+        if (isEmpty()) { return null; }
+        return min(root).key;
+    }
+    
+    private Node min(Node x) {
+        if (x.left == null) return null;
+        else return min(x.left);
     }
     
     public void deleteMin() { root = deleteMin(root); }
@@ -84,7 +96,7 @@ public class BST<Key extends Comparable<Key>, Value> {
     public void delete(Key key) { root = delete(root, key); }
     
     private Node delete(Node x, Key key) {
-        if (x = null) { return null; }
+        if (x == null) { return null; }
         int cmp = key.compareTo(x.key);
         if (cmp < 0) { x.left = delete(x.left, key); }
         else if (cmp > 0) { x.right = delete(x.right, key); }
@@ -101,7 +113,7 @@ public class BST<Key extends Comparable<Key>, Value> {
     }
          
     
-    public Iterable<Key> iterator {}
+    //public Iterable<Key> iterator {}
     
     public Iterable<Key> keys() {
         Queue<Key> q = new Queue<Key>();
@@ -114,5 +126,11 @@ public class BST<Key extends Comparable<Key>, Value> {
         inorder(x.left, q);
         q.enqueue(x.key);
         inorder(x.right, q);
+    }
+    
+    public static void main(String[] args) {
+        
+        BST bst = new BST<Integar>();
+        bst.put()
     }
 }
